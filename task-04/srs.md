@@ -54,11 +54,11 @@ This platform will offer the following features:
 
 # 3. Non-Functional Requirements
 
-# 3.1 Perfomance
+## 3.1 Perfomance
 
 - The platform should be able to multiple users simultaneously
 
-# 3.2 Usability
+## 3.2 Usability
 
 - The platform should follow accessibility guidelines for a better user experience
 
