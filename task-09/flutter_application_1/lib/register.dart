@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'api_routes.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback onLoginClicked;
@@ -14,6 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,10 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
+              TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: 'Username'),
+            ),
             TextField(
               controller: _emailController,
               decoration: InputDecoration(labelText: 'Email'),
@@ -41,14 +48,31 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                if (_passwordController.text == _confirmPasswordController.text) {
-                  widget.onRegister(_emailController.text, _passwordController.text);
-                } else {
+              onPressed: () async {
+                final username = _nameController.text;
+                final email = _emailController.text;
+                final password = _passwordController.text;
+
+                final userData = await ApiService.registerUser(username, email, password);
+                if (userData != null) {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.setString('username', userData['name']);
+                await prefs.setInt('userId', userData['id']);
+                await prefs.setString('userEmail', userData['email']);
+                await prefs.setBool('isLoggedIn', true);
+
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Registered successfully!')),
+                 );
+                Navigator.pop(context);
+
+              } else {    
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Passwords don't match!")),
+                  SnackBar(content: Text('Registration failed. Try again.')),
                   );
-                }
+              }
+
               },
               child: Text('Register'),
             ),

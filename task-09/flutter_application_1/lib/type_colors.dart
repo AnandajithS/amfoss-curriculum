@@ -7,7 +7,7 @@ final Map<String, Color> typeColors = {
   'water': Colors.blue,
   'bug': Colors.lightGreen,
   'normal': Colors.grey,
-  'electric': Colors.yellowAccent,
+  'electric': Colors.yellow,
   'ground': Colors.brown,
   'fairy': Colors.pinkAccent,
   'fighting': Colors.orange,
